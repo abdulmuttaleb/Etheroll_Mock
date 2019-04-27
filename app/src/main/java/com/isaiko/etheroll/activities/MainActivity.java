@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,14 +34,14 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String ROPSTEN_PRIVATE = BuildConfig.ROPSTEN_PRIVATE;
-    public static final String ROPSTEN_PUBLIC = BuildConfig.ROPSTEN_PUBLIC;
+    public static final String INFURA_PRIVATE = BuildConfig.INFURA_PRIVATE;
+    public static final String INFURA_PUBLIC = BuildConfig.INFURA_PUBLIC;
 
     private final static String ETHEROLL_ADDRESS = "0xA52e014B3f5Cc48287c2D483A3E026C32cc76E6d";
-    private final static String ROPSTEN_URL = "https://ropsten.infura.io/"+ROPSTEN_PUBLIC;
+    private final static String ROPSTEN_URL = "https://ropsten.infura.io/"+INFURA_PUBLIC;
 
     private Web3j web3j;
-    private Credentials credentials = Credentials.create(ROPSTEN_PRIVATE);
+    private Credentials credentials = Credentials.create(INFURA_PRIVATE);
     private int minimumGasLimit = 21000;
     private BigInteger gasLimit = new BigInteger(String.valueOf(minimumGasLimit));
 
