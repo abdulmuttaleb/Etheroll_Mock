@@ -1,8 +1,11 @@
 package com.isaiko.etheroll.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -18,21 +21,33 @@ import android.widget.Toast;
 import com.isaiko.etheroll.BuildConfig;
 import com.isaiko.etheroll.R;
 import com.isaiko.etheroll.utils.Web3jHandler;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     public static final String INFURA_PRIVATE = BuildConfig.INFURA_PRIVATE;
     public static final String INFURA_PUBLIC = BuildConfig.INFURA_PUBLIC;
@@ -72,31 +87,100 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Connection Error! Try again later", Toast.LENGTH_SHORT).show();
         }
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(v ->
+                Dexter.withActivity(this).withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).withListener(new MultiplePermissionsListener() {
             @Override
-            public void onClick(View v) {
-                if(!TextUtils.isEmpty(passwordEditText.getText().toString())){
-                    passwordEditText.setError(null);
-                    new LoadWalletTask().execute();
-                    ShowProgressDialog();
-                }else{
-                    passwordEditText.setError("Invalid password!");
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if(!report.isAnyPermissionPermanentlyDenied()){
+                    login();
                 }
             }
-        });
 
-        createWalletButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if(!TextUtils.isEmpty(passwordEditText.getText().toString())){
-                    passwordEditText.setError(null);
-                    new CreateWalletTask().execute();
-                    ShowProgressDialog();
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        }).onSameThread().check());
+
+        createWalletButton.setOnClickListener(v ->
+                Dexter.withActivity(this).withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if(!report.isAnyPermissionPermanentlyDenied()){
+                            signup();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).onSameThread().check()
+        );
+
+        // Checking permission before checking existing wallets
+        checkPermissionsOnStart();
+
+    }
+
+    private void checkPermissionsOnStart(){
+        Dexter.withActivity(this).withPermissions(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if(!report.isAnyPermissionPermanentlyDenied()){
+                    createWalletButton.setEnabled(true);
+                    loginButton.setEnabled(true);
+                    checkExistingWallets();
                 }else{
-                    passwordEditText.setError("Invalid password!");
+                    Toast.makeText(MainActivity.this, "Can't proceed without providing write/reading to storage permissions.\nPlease change that in settings", Toast.LENGTH_SHORT).show();
+                    loginButton.setEnabled(false);
+                    createWalletButton.setEnabled(false);
                 }
             }
-        });
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        }).onSameThread().check();
+    }
+
+    private void login(){
+        if(!TextUtils.isEmpty(passwordEditText.getText().toString())){
+            passwordEditText.setError(null);
+            new LoadWalletTask().execute();
+            ShowProgressDialog();
+        }else{
+            passwordEditText.setError("Invalid password!");
+        }
+    }
+
+    private void signup(){
+        if(!TextUtils.isEmpty(passwordEditText.getText().toString())){
+            passwordEditText.setError(null);
+            new CreateWalletTask().execute();
+            ShowProgressDialog();
+        }else{
+            passwordEditText.setError("Invalid password!");
+        }
+    }
+    private void checkExistingWallets() {
+        File walletFolder = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS).getAbsolutePath(),"/android/data/com.isaiko.etherollmock/");
+        Log.e(TAG, "checkExistingWallets: "+walletFolder.exists());
+        File[] wallets = walletFolder.listFiles();
+        if(wallets != null) {
+            for (File file : wallets) {
+                Log.e(TAG, "checkExistingWallets: " + file.getName());
+            }
+        }
     }
 
     class LoadWalletTask extends AsyncTask<Void, Void, Void>{
@@ -110,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
     class CreateWalletTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... voids) {
-
             CreateWallet();
             return null;
         }
@@ -191,5 +274,9 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.cancel();
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPermissionsOnStart();
+    }
 }
