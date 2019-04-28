@@ -1,8 +1,10 @@
 package com.isaiko.etheroll.utils;
 
 import android.os.Environment;
+import android.util.Log;
 
 import com.isaiko.etheroll.BuildConfig;
+import com.isaiko.etheroll.contracts.Etheroll;
 
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
@@ -14,8 +16,11 @@ import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.Contract;
+import org.web3j.tx.ManagedTransaction;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
+import org.web3j.utils.Convert.Unit;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,15 +36,20 @@ import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class Web3jHandler {
 
-    public static final String ROPSTEN_PRIVATE = BuildConfig.ROPSTEN_PRIVATE;
-    public static final String ROPSTEN_PUBLIC = BuildConfig.ROPSTEN_PUBLIC;
+    public static final String INFURA_PRIVATE = BuildConfig.INFURA_PRIVATE;
+    public static final String INFURA_PUBLIC = BuildConfig.INFURA_PUBLIC;
     public static final String WALLET_PATH = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS).getPath();
+    //Contract address on Ropsten network
+    public static final String ETHEROLL_CONTRACT_ADDRESS = "0xFE8a5f3a7Bb446e1cB4566717691cD3139289ED4";
+    private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
+    private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
+    public static Etheroll EtherollContract;
     private static Web3j web3;
     private static Credentials credentials;
     private static TransactionReceipt transactionReceipt;
 
     public static boolean web3Connection() throws IOException {
-        web3 = Web3jFactory.build(new HttpService("https://ropsten.infura.io/"+ROPSTEN_PUBLIC));
+        web3 = Web3jFactory.build(new HttpService("https://ropsten.infura.io/"+INFURA_PUBLIC));
         return  web3 != null;
     }
 
@@ -53,7 +63,7 @@ public class Web3jHandler {
     }
 
     public static TransactionReceipt transaction(String address, double ethBalance) throws Exception {
-        return transactionReceipt = Transfer.sendFunds( web3, credentials, address, BigDecimal.valueOf(ethBalance), Convert.Unit.ETHER).send();
+        return transactionReceipt = Transfer.sendFunds( web3, credentials, address, BigDecimal.valueOf(ethBalance), Unit.ETHER).send();
     }
 
     public static BigInteger getBalance(){
@@ -69,8 +79,8 @@ public class Web3jHandler {
         return credentials.getAddress();
     }
 
-    public static BigInteger getEtherBalance() throws ExecutionException, InterruptedException {
-        return web3.ethGetBalance(getWalletAddress(),DefaultBlockParameterName.LATEST).sendAsync().get().getBalance();
+    public static BigDecimal getEtherBalance() throws ExecutionException, InterruptedException {
+        return Convert.fromWei(web3.ethGetBalance(getWalletAddress(),DefaultBlockParameterName.LATEST).sendAsync().get().getBalance().toString(), Unit.ETHER);
     }
 
     public static String printWeb3Version(){
@@ -82,5 +92,15 @@ public class Web3jHandler {
         }
         String web3jClientVersionString = web3ClientVersion.getWeb3ClientVersion();
         return "Web3 client version: " + web3jClientVersionString;
+    }
+
+    public static void initEtheroll() throws Exception {
+        EtherollContract = loadEtherollContract();
+        //instantiating vars
+        EtherollVars vars = new EtherollVars();
+    }
+
+    private static Etheroll loadEtherollContract(){
+        return Etheroll.load(ETHEROLL_CONTRACT_ADDRESS, web3, credentials, GAS_PRICE, GAS_LIMIT);
     }
 }
