@@ -32,13 +32,15 @@ import java.security.NoSuchProviderException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static android.os.Environment.DIRECTORY_DOWNLOADS;
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
 
 public class Web3jHandler {
 
+    private static final String TAG = "Web3jHandler";
+
     public static final String INFURA_PRIVATE = BuildConfig.INFURA_PRIVATE;
     public static final String INFURA_PUBLIC = BuildConfig.INFURA_PUBLIC;
-    public static final String WALLET_PATH = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS).getPath();
+    public static final File WALLET_FILE = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS),"/android/data/com.isaiko.etherollmock/") ;
     //Contract address on Ropsten network
     public static final String ETHEROLL_CONTRACT_ADDRESS = "0xFE8a5f3a7Bb446e1cB4566717691cD3139289ED4";
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
@@ -58,8 +60,16 @@ public class Web3jHandler {
     }
 
     public static String createWallet(String password) throws CipherException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
-        String fileName = WalletUtils.generateLightNewWalletFile(password, new File(WALLET_PATH));
-        return WALLET_PATH+"/"+fileName;
+        if(!WALLET_FILE.exists()){
+            if(WALLET_FILE.mkdirs()) {
+                String fileName = WalletUtils.generateLightNewWalletFile(password, WALLET_FILE);
+                Log.e(TAG, "createWallet: " + fileName);
+                return WALLET_FILE.getAbsolutePath() + "/" + fileName;
+            }else{
+                return "";
+            }
+        }
+        return "";
     }
 
     public static TransactionReceipt transaction(String address, double ethBalance) throws Exception {

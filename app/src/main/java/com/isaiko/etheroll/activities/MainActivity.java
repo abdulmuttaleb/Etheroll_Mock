@@ -110,78 +110,73 @@ public class MainActivity extends AppCompatActivity {
     class CreateWalletTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... voids) {
+
             CreateWallet();
             return null;
         }
     }
     private void CreateWallet(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String filePath = Web3jHandler.createWallet(passwordEditText.getText().toString());
+        new Thread(() -> {
+            try {
+                String filePath = Web3jHandler.createWallet(passwordEditText.getText().toString());
+                if(filePath.isEmpty()){
+                    ToastInTask("Wallet wasn't created successfully");
+                    HideProgressDialog();
+                }else{
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("wallet_path", filePath).apply();
                     ToastInTask("Wallet was created Successfully!");
                     HideProgressDialog();
-                } catch (CipherException e) {
-                    e.printStackTrace();
-                    ToastInTask(e.getMessage());
-                    HideProgressDialog();
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                    ToastInTask(e.getMessage());
-                    HideProgressDialog();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                    ToastInTask(e.getMessage());
-                    HideProgressDialog();
-                } catch (NoSuchProviderException e) {
-                    e.printStackTrace();
-                    ToastInTask(e.getMessage());
-                    HideProgressDialog();
-                } catch (IOException e) {
-                    Log.d("io","Invalid file");
-                    ToastInTask(e.getMessage());
-                    HideProgressDialog();
-                    e.printStackTrace();
                 }
+            } catch (CipherException e) {
+                e.printStackTrace();
+                ToastInTask(e.getMessage());
+                HideProgressDialog();
+            } catch (InvalidAlgorithmParameterException e) {
+                e.printStackTrace();
+                ToastInTask(e.getMessage());
+                HideProgressDialog();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                ToastInTask(e.getMessage());
+                HideProgressDialog();
+            } catch (NoSuchProviderException e) {
+                e.printStackTrace();
+                ToastInTask(e.getMessage());
+                HideProgressDialog();
+            } catch (IOException e) {
+                Log.d("io","Invalid file");
+                ToastInTask(e.getMessage());
+                HideProgressDialog();
+                e.printStackTrace();
             }
         }).start();
     }
     private void UnlockWallet(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String filePath = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("wallet_path", "defaultStringIfNothingFound");
-                    if(filePath.equals("defaultStringIfNothingFound")){
-                        ToastInTask("No wallets");
-                    }else{
-                        Web3jHandler.loadCredentials(passwordEditText.getText().toString(), filePath);
-                        Intent EtherollIntent = new Intent(getApplicationContext(), EtherollActivity.class);
-                        startActivity(EtherollIntent);
-                    }
-                    HideProgressDialog();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    ToastInTask("Connection Error");
-                    HideProgressDialog();
-                } catch (CipherException e) {
-                    e.printStackTrace();
-                    ToastInTask("Invalid Password");
-                    HideProgressDialog();
+        new Thread(() -> {
+            try {
+                String filePath = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("wallet_path", "defaultStringIfNothingFound");
+                if(filePath.equals("defaultStringIfNothingFound")){
+                    ToastInTask("No wallets");
+                }else{
+                    Web3jHandler.loadCredentials(passwordEditText.getText().toString(), filePath);
+                    Intent EtherollIntent = new Intent(getApplicationContext(), EtherollActivity.class);
+                    startActivity(EtherollIntent);
                 }
+                HideProgressDialog();
+            } catch (IOException e) {
+                e.printStackTrace();
+                ToastInTask("Connection Error");
+                HideProgressDialog();
+            } catch (CipherException e) {
+                e.printStackTrace();
+                ToastInTask("Invalid Password");
+                HideProgressDialog();
             }
         }).start();
     }
 
     private void ToastInTask(final String toastText){
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this, toastText , Toast.LENGTH_LONG).show();
-            }
-        });
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MainActivity.this, toastText , Toast.LENGTH_LONG).show());
     }
 
     private void ShowProgressDialog(){

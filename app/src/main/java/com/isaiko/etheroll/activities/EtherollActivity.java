@@ -143,15 +143,12 @@ public class EtherollActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-        walletAddressTextView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                ClipboardManager clipboardManager = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-                ClipData clipData = ClipData.newPlainText("address",walletAddressTextView.getText().toString());
-                clipboardManager.setPrimaryClip(clipData);
-                Toast.makeText(EtherollActivity.this, "Address was copied to clipboard!", Toast.LENGTH_SHORT).show();
-                return true;
-            }
+        walletAddressTextView.setOnLongClickListener(v -> {
+            ClipboardManager clipboardManager = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText("address",walletAddressTextView.getText().toString());
+            clipboardManager.setPrimaryClip(clipData);
+            Toast.makeText(EtherollActivity.this, "Address was copied to clipboard!", Toast.LENGTH_SHORT).show();
+            return true;
         });
 
         wagerNumberTextView.setText(String.valueOf(Integer.valueOf(chanceWinningEditText.getText().toString())+1));
