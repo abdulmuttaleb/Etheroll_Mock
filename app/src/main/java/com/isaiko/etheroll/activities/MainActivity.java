@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.isaiko.etheroll.BuildConfig;
@@ -66,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
     Button createWalletButton;
     @BindView(R.id.et_password)
     EditText passwordEditText;
-
+    @BindView(R.id.tv_wallet_file)
+    TextView walletFileName;
     ProgressDialog progressDialog;
 
 
@@ -124,9 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 }).onSameThread().check()
         );
 
-        // Checking permission before checking existing wallets
-        checkPermissionsOnStart();
-
     }
 
     private void checkPermissionsOnStart(){
@@ -177,9 +176,13 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "checkExistingWallets: "+walletFolder.exists());
         File[] wallets = walletFolder.listFiles();
         if(wallets != null) {
+            createWalletButton.setVisibility(View.GONE);
             for (File file : wallets) {
                 Log.e(TAG, "checkExistingWallets: " + file.getName());
+                walletFileName.append(file.getName()+"\n");
             }
+        }else{
+            walletFileName.setText("No wallet file found");
         }
     }
 
@@ -277,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        walletFileName.setText("");
         checkPermissionsOnStart();
     }
 }
