@@ -107,7 +107,6 @@ public class Web3jHandler {
     public static void initEtheroll() throws Exception {
         EtherollContract = loadEtherollContract();
         //instantiating vars
-        EtherollVars vars = new EtherollVars();
     }
 
     private static Etheroll loadEtherollContract(){
