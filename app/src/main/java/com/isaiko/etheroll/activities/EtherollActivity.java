@@ -237,4 +237,25 @@ public class EtherollActivity extends AppCompatActivity {
         Log.e(TAG, "rollButton: "+rollUnder+" "+weiValue);
         etherollViewModel.playerRollDice(rollUnder, weiValue,this);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_transactions:
+                Intent transactions = new Intent(this, TransactionsActivity.class);
+                startActivity(transactions);
+                Log.e(TAG, "onOptionsItemSelected: transaction" );
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
