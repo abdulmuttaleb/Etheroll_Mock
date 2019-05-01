@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class EtherollActivity extends AppCompatActivity {
     private final String TAG = "EtherollActivity";
@@ -183,5 +185,41 @@ public class EtherollActivity extends AppCompatActivity {
             Log.d(TAG, "Number format exception");
             return Convert.fromWei(etherollViewModel.getMaxProfit().toString(), Convert.Unit.ETHER);
         }
+    }
+
+    @OnClick(R.id.btn_min)
+    public void minBet(){
+        betSizeEditText.setText(Convert.fromWei(etherollViewModel.getMinBet().toString(), Convert.Unit.ETHER).toString());
+        winningValueTextView.setText(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),(Double.valueOf(wagerNumberTextView.getText().toString())-1)/100).toPlainString());
+    }
+
+    @OnClick(R.id.btn_0_5)
+    public void halfBet(){
+        betSizeEditText.setText(String.valueOf(0.5f));
+        winningValueTextView.setText(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),(Double.valueOf(wagerNumberTextView.getText().toString())-1)/100).toPlainString());
+    }
+
+    @OnClick(R.id.btn_1)
+    public void oneBet(){
+        betSizeEditText.setText(String.valueOf(1.0f));
+        winningValueTextView.setText(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),(Double.valueOf(wagerNumberTextView.getText().toString())-1)/100).toPlainString());
+    }
+
+    @OnClick(R.id.btn_2)
+    public void twoBet(){
+        betSizeEditText.setText(String.valueOf(2.0f));
+        winningValueTextView.setText(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),(Double.valueOf(wagerNumberTextView.getText().toString())-1)/100).toPlainString());
+    }
+
+    @OnClick(R.id.btn_5)
+    public void fiveBet(){
+        betSizeEditText.setText(String.valueOf(5.0f));
+        winningValueTextView.setText(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),(Double.valueOf(wagerNumberTextView.getText().toString())-1)/100).toPlainString());
+    }
+
+    @OnClick(R.id.btn_10)
+    public void tenBet(){
+        betSizeEditText.setText(String.valueOf(10.0f));
+        winningValueTextView.setText(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),(Double.valueOf(wagerNumberTextView.getText().toString())-1)/100).toPlainString());
     }
 }
