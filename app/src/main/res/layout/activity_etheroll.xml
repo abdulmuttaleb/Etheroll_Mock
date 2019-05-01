@@ -465,7 +465,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:text="(Warning: Max profit reached)"
+            android:text="(Warning: Max profit reached). Roll button is locked"
             android:textAlignment="viewEnd"
             android:visibility="gone"
             android:textColor="@android:color/holo_red_light"/>

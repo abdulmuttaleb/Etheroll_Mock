@@ -36,6 +36,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:elevation="1dp"
         android:text="Login"/>
 
     <Button
@@ -43,5 +44,6 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:elevation="1dp"
         android:text="create wallet"/>
 </LinearLayout>
