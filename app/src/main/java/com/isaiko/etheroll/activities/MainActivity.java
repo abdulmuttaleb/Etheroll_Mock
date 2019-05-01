@@ -247,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     Web3jHandler.loadCredentials(passwordEditText.getText().toString(), filePath);
                     Intent EtherollIntent = new Intent(getApplicationContext(), EtherollActivity.class);
+                    EtherollIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(EtherollIntent);
                 }
                 HideProgressDialog();

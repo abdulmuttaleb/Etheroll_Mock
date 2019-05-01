@@ -2,14 +2,18 @@ package com.isaiko.etheroll.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -56,13 +60,16 @@ public class EtherollActivity extends AppCompatActivity {
     TextView maxProfitTextView;
     @BindView(R.id.tv_max_profit_warning)
     TextView maxProfitExceededWarning;
+    @BindView(R.id.toolbar)
+    Toolbar mainToolbar;
     EtherollViewModel etherollViewModel;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_etheroll);
         ButterKnife.bind(this);
-
+        setSupportActionBar(mainToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         etherollViewModel = ViewModelProviders.of(this).get(EtherollViewModel.class);
         walletAddressTextView.setText(Web3jHandler.getWalletAddress());
         try {
