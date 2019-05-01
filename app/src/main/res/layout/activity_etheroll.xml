@@ -1,34 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:background="@color/colorPrimary">
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
             android:text="ETHEROLL"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="48sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="1" />
 
         <LinearLayout
+            android:id="@+id/ll_address"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
             android:layout_marginStart="16dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
 
             <TextView
                 android:layout_width="0dp"
@@ -48,11 +60,16 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_balance"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/ll_address"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
                 android:layout_width="0dp"
@@ -73,10 +90,15 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_bet_size"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
             android:layout_marginTop="30dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/ll_balance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -137,6 +159,7 @@
                             android:layout_height="match_parent"
                             tools:text="0.1 ETH"
                             android:textStyle="bold"
+                            android:textAlignment="viewEnd"
                             android:textColor="@android:color/white"/>
                     </LinearLayout>
                     <LinearLayout
@@ -157,6 +180,7 @@
                             android:layout_weight="2.5"
                             android:layout_height="wrap_content"
                             tools:text="+47.620467967074277635 eth"
+                            android:textAlignment="viewEnd"
                             android:textStyle="bold"
                             android:textColor="@android:color/white"/>
                     </LinearLayout>
@@ -172,43 +196,67 @@
                 android:orientation="horizontal">
                 <Button
                     android:id="@+id/btn_min"
-                    android:layout_width="55dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="MIN"/>
+                    android:text="MIN"
+                    android:backgroundTint="@android:color/white"
+                    android:textColor="@color/colorPrimary"/>
 
                 <Button
                     android:id="@+id/btn_0.5"
-                    android:layout_width="55dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="0.5"/>
+                    android:text="0.5"
+                    android:backgroundTint="@android:color/white"
+                    android:textColor="@color/colorPrimary"/>
                 <Button
                     android:id="@+id/btn_1"
-                    android:layout_width="55dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="1"/>
+                    android:text="1"
+                    android:backgroundTint="@android:color/white"
+                    android:textColor="@color/colorPrimary"/>
                 <Button
                     android:id="@+id/btn_2"
-                    android:layout_width="55dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="2"/>
+                    android:text="2"
+                    android:backgroundTint="@android:color/white"
+                    android:textColor="@color/colorPrimary"/>
                 <Button
                     android:id="@+id/btn_5"
-                    android:layout_width="55dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="5"/>
+                    android:text="5"
+                    android:backgroundTint="@android:color/white"
+                    android:textColor="@color/colorPrimary"/>
                 <Button
                     android:id="@+id/btn_10"
-                    android:layout_width="55dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="10"/>
+                    android:text="10"
+                    android:backgroundTint="@android:color/white"
+                    android:textColor="@color/colorPrimary"/>
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_calculations"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
             android:layout_marginTop="16dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/ll_bet_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -276,12 +324,18 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_roll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/ll_calculations"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -303,10 +357,16 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ll_wager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
             android:layout_marginTop="32dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/rl_roll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -341,10 +401,16 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_profit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
             android:layout_marginTop="16dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/ll_wager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -378,10 +444,15 @@
             </LinearLayout>
         </LinearLayout>
     <LinearLayout
+        android:id="@+id/ll_commission"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/ll_profit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -406,10 +477,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:elevation="3dp"
-            android:backgroundTint="@android:color/white"
             android:text="ROLL"
+            android:backgroundTint="@android:color/white"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/ll_commission"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
