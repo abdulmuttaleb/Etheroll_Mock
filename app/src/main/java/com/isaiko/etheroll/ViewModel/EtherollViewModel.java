@@ -1,17 +1,19 @@
 package com.isaiko.etheroll.ViewModel;
 
 import android.app.Application;
-
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-
 import com.isaiko.etheroll.utils.Web3jHandler;
+
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
+import static com.isaiko.etheroll.utils.ExtensionsUtils.ToastInTask;
 import static com.isaiko.etheroll.utils.Web3jHandler.EtherollContract;
 
 
@@ -58,5 +60,18 @@ public class EtherollViewModel extends AndroidViewModel {
 
     public BigDecimal getWalletBalance() {
         return walletBalance;
+    }
+
+    public void playerRollDice(BigInteger rollUnder, BigInteger weiValue, Context context){
+            new Thread(() -> {
+                try {
+                    TransactionReceipt transactionReceipt = EtherollContract.playerRollDice(rollUnder, weiValue).sendAsync().get();
+                    ToastInTask("Transaction successful with id:"+transactionReceipt.getTransactionHash(),context);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
     }
 }

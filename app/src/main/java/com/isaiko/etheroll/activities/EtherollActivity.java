@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -158,6 +157,7 @@ public class EtherollActivity extends AppCompatActivity {
 
 
        // winningValueTextView.setText(String.valueOf(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),Integer.valueOf(wagerNumberTextView.getText().toString()))));
+
     }
 
     private BigDecimal calculateProfit(BigInteger betValue, Double roll){
@@ -221,5 +221,13 @@ public class EtherollActivity extends AppCompatActivity {
     public void tenBet(){
         betSizeEditText.setText(String.valueOf(10.0f));
         winningValueTextView.setText(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),(Double.valueOf(wagerNumberTextView.getText().toString())-1)/100).toPlainString());
+    }
+
+    @OnClick(R.id.btn_roll)
+    public void rollButton(){
+        BigInteger rollUnder = BigInteger.valueOf(Long.valueOf(chanceWinningEditText.getText().toString()));
+        BigInteger weiValue = Convert.toWei(betSizeEditText.getText().toString(), Convert.Unit.ETHER).toBigInteger();
+        Log.e(TAG, "rollButton: "+rollUnder+" "+weiValue);
+        etherollViewModel.playerRollDice(rollUnder, weiValue,this);
     }
 }

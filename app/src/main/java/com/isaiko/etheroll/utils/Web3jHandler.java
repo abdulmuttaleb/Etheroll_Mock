@@ -16,8 +16,6 @@ import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.Contract;
-import org.web3j.tx.ManagedTransaction;
 import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Convert.Unit;
@@ -46,7 +44,7 @@ public class Web3jHandler {
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
     public static Etheroll EtherollContract;
-    private static Web3j web3;
+    public static Web3j web3;
     private static Credentials credentials;
     private static TransactionReceipt transactionReceipt;
 

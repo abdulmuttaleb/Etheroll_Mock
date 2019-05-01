@@ -45,6 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.os.Environment.DIRECTORY_DOCUMENTS;
+import static com.isaiko.etheroll.utils.ExtensionsUtils.ToastInTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -206,32 +207,32 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String filePath = Web3jHandler.createWallet(passwordEditText.getText().toString());
                 if(filePath.isEmpty()){
-                    ToastInTask("Wallet wasn't created successfully");
+                    ToastInTask("Wallet wasn't created successfully",this);
                     HideProgressDialog();
                 }else{
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("wallet_path", filePath).apply();
-                    ToastInTask("Wallet was created Successfully!");
+                    ToastInTask("Wallet was created Successfully!",this);
                     HideProgressDialog();
                 }
             } catch (CipherException e) {
                 e.printStackTrace();
-                ToastInTask(e.getMessage());
+                Log.e(TAG, "CreateWallet: "+e.getMessage());
                 HideProgressDialog();
             } catch (InvalidAlgorithmParameterException e) {
                 e.printStackTrace();
-                ToastInTask(e.getMessage());
+                Log.e(TAG, "CreateWallet: "+e.getMessage());
                 HideProgressDialog();
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
-                ToastInTask(e.getMessage());
+                Log.e(TAG, "CreateWallet: "+e.getMessage());
                 HideProgressDialog();
             } catch (NoSuchProviderException e) {
                 e.printStackTrace();
-                ToastInTask(e.getMessage());
+                Log.e(TAG, "CreateWallet: "+e.getMessage());
                 HideProgressDialog();
             } catch (IOException e) {
                 Log.d("io","Invalid file");
-                ToastInTask(e.getMessage());
+                Log.e(TAG, "CreateWallet: "+e.getMessage());
                 HideProgressDialog();
                 e.printStackTrace();
             }
@@ -242,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String filePath = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("wallet_path", "defaultStringIfNothingFound");
                 if(filePath.equals("defaultStringIfNothingFound")){
-                    ToastInTask("No wallets");
+                    ToastInTask("No wallets",this);
                 }else{
                     Web3jHandler.loadCredentials(passwordEditText.getText().toString(), filePath);
                     Intent EtherollIntent = new Intent(getApplicationContext(), EtherollActivity.class);
@@ -251,19 +252,16 @@ public class MainActivity extends AppCompatActivity {
                 HideProgressDialog();
             } catch (IOException e) {
                 e.printStackTrace();
-                ToastInTask("Connection Error");
+                ToastInTask("Connection Error",this);
                 HideProgressDialog();
             } catch (CipherException e) {
                 e.printStackTrace();
-                ToastInTask("Invalid Password");
+                ToastInTask("Invalid Password",this);
                 HideProgressDialog();
             }
         }).start();
     }
 
-    private void ToastInTask(final String toastText){
-        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(MainActivity.this, toastText , Toast.LENGTH_LONG).show());
-    }
 
     private void ShowProgressDialog(){
         progressDialog = new ProgressDialog(MainActivity.this);
