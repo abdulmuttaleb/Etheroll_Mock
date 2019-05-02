@@ -248,9 +248,9 @@ public class EtherollActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_transactions:
-                Intent transactions = new Intent(this, TransactionsActivity.class);
-                startActivity(transactions);
-                Log.e(TAG, "onOptionsItemSelected: transaction" );
+//                Intent transactions = new Intent(this, TransactionsActivity.class);
+//                startActivity(transactions);
+                Toast.makeText(this, "Transactions aren't available with infura", Toast.LENGTH_SHORT).show();
                 break;
             case android.R.id.home:
                 finish();
