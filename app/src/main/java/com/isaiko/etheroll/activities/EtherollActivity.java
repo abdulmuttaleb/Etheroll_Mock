@@ -93,6 +93,8 @@ public class EtherollActivity extends AppCompatActivity {
         chanceWinningEditText.setText(String.valueOf(chanceOfWinningSeekBar.getProgress()+1));
         bidValueTextView.setText(betSizeEditText.getText().toString());
 
+        winningValueTextView.setText(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),(double)(chanceOfWinningSeekBar.getProgress()+1)/100).toPlainString());
+
         chanceOfWinningSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -162,7 +164,6 @@ public class EtherollActivity extends AppCompatActivity {
 
         wagerNumberTextView.setText(String.valueOf(Integer.valueOf(chanceWinningEditText.getText().toString())+1));
 
-
        // winningValueTextView.setText(String.valueOf(calculateProfit(Convert.toWei(bidValueTextView.getText().toString(), Convert.Unit.ETHER).toBigInteger(),Integer.valueOf(wagerNumberTextView.getText().toString()))));
 
     }
@@ -172,9 +173,9 @@ public class EtherollActivity extends AppCompatActivity {
         try{
             pureProfit = BigDecimal.valueOf(betValue.doubleValue() * (1-roll)/roll);
             profit = pureProfit.subtract(pureProfit.add(BigDecimal.valueOf(betValue.longValue())).divide(BigDecimal.valueOf(100)));
-            if(profit.compareTo(BigDecimal.valueOf(etherollViewModel.getMaxProfit().doubleValue())) == 1)
+            if(profit.compareTo(BigDecimal.valueOf(etherollViewModel.getMaxProfit().doubleValue())) > 0)
             {
-                Log.d(TAG, "Max Profit reached");
+                Log.e(TAG, "Max Profit reached");
                 profit = BigDecimal.valueOf(etherollViewModel.getMaxProfit().doubleValue());
                 maxProfitExceededWarning.setVisibility(View.VISIBLE);
                 rollButton.setEnabled(false);
